@@ -1,0 +1,164 @@
+@use '../../scss/' as *;
+
+.wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .form {
+        width: 474px;
+        min-height: 544px;
+        padding: 48px 58px;
+        border: 1px solid $border-color;
+        border-radius: 24px;
+
+        .title {
+            margin: 27px 0;
+            font-size: 18px;
+            font-weight: $weight-bold;
+            letter-spacing: $letter-spacing;
+
+            .description {
+                margin-top: 15px;
+                font-size: 16px;
+                font-weight: $weight-normal;
+                letter-spacing: $letter-spacing;
+            }
+        }
+
+        .input {
+            position: relative;
+            margin-bottom: 14px;
+            ;
+
+            &-icon {
+                position: absolute;
+                top: 50%;
+                left: 12px;
+                transform: translateY(-50%);
+                width: 24px;
+                height: 24px;
+                color: $text-color-2;
+            }
+
+            input {
+                width: 100%;
+                border: 1px solid $border-color;
+                border-radius: $radius-1;
+                padding: 12px 0 12px 47px;
+                font-size: 16px;
+                font-weight: $weight-normal;
+                letter-spacing: $letter-spacing;
+
+
+            }
+        }
+
+        .btn {
+            width: 100%;
+            height: 38px;
+            border-radius: $radius-1;
+            font-size: 16px;
+            font-weight: $weight-bold;
+            color: $white-color;
+            letter-spacing: $letter-spacing;
+            margin-top: 10px;
+        }
+
+        .social {
+            margin: 33px 0;
+            text-align: center;
+
+            span {
+                color: $text-color-2;
+                font-size: 14px;
+                font-weight: $weight-normal;
+                letter-spacing: -0.49px;
+
+            }
+
+            .icons {
+                display: flex;
+                gap: 21px;
+                justify-content: center;
+                margin-top: 23px;
+
+                span {
+                    width: 42px;
+                    height: 42px;
+                    border: 1px solid $text-color-2;
+                    color: $text-color-2;
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+
+                    svg {
+                        font-size: 18px;
+                    }
+                }
+            }
+        }
+
+        .account {
+            text-align: center;
+            color: $text-color-2;
+            font-size: 14px;
+            font-weight: $weight-normal;
+            letter-spacing: -0.49px;
+
+            a {
+                color: #2D9CDB;
+            }
+        }
+    }
+
+    .create-by {
+        width: 474px;
+        display: flex;
+        justify-content: space-between;
+
+        p {
+            font-size: 14px;
+            font-weight: $weight-normal;
+            color: $text-color-2;
+            letter-spacing: -0.49;
+
+            span {
+                text-decoration: underline;
+                font-weight: $weight-bold;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 598px) {
+    .wrapper {
+        justify-content: space-between;
+        align-items: flex-start;
+
+        .form {
+            width: 100%;
+            padding: 17px 19px;
+            border: none;
+
+            .title {
+                margin-bottom: 35px;
+            }
+
+            .social {
+                margin-bottom: 27px;
+            }
+        }
+
+        .create-by {
+            width: 100%;
+            padding: 17px 19px;
+        }
+    }
+}
