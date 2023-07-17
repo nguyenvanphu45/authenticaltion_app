@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        username: {
+        name: {
             type: String,
         },
         phone: {
@@ -19,6 +19,8 @@ const userSchema = new mongoose.Schema(
         },
         bio: {
             type: String,
+            maxlength: 150,
+            minlength: 0,
         },
         image: {
             type: String,

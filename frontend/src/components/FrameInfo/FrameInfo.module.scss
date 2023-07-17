@@ -1,0 +1,27 @@
+@use '../../scss/' as *;
+
+.form {
+    width: 846px;
+    min-height: 581px;
+    border-radius: $radius-2;
+    border: 1px solid $border-color-2;
+    margin-bottom: 15px;
+}
+
+.footer {
+    width: 846px;
+    display: flex;
+    justify-content: space-between;
+
+    p {
+        color: $text-color-2;
+        font-size: 14px;
+        font-weight: $weight-normal;
+        letter-spacing: -0.49px;
+
+        span {
+            font-weight: $weight-bold;
+            text-decoration: underline;
+        }
+    }
+}

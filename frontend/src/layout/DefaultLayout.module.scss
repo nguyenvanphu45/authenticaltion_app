@@ -1,0 +1,13 @@
+@use '../scss/' as *;
+
+.wrapper {
+    margin: 27px 72px;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
