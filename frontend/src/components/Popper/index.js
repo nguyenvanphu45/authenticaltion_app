@@ -23,7 +23,7 @@ function Popper({ children, items }) {
         </div>
     );
     return (
-        <Tippy placement="bottom-end" distance={27} delay={[0, 700]} offset={[12, 27]} interactive render={renderResult}>
+        <Tippy placement="bottom-end" delay={[0, 700]} offset={[12, 27]} interactive render={renderResult}>
             {children}
         </Tippy>
     );

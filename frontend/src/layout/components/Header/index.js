@@ -10,16 +10,26 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Popper from '../../../components/Popper';
 import { dispatchLogoutUser } from '../../../redux/actions/authActions';
+import { createAxios } from '../../../utils/createInstance';
 
 const cx = classNames.bind(styles);
 
 function Header() {
     const auth = useSelector((state) => state.auth);
+    const token = useSelector((state) => state.token);
     const { user, isLogged } = auth;
     const dispatch = useDispatch();
+    let axiosJWT = createAxios(user, token, dispatch, dispatchLogoutUser);
 
     const logout = async () => {
-        dispatch(dispatchLogoutUser());
+        try {
+            await axiosJWT.post('http://localhost:5000/auth/logout', user._id, {
+                headers: {token: `Bearer ${token}`}
+            });
+            dispatch(dispatchLogoutUser());
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const userMenu = [

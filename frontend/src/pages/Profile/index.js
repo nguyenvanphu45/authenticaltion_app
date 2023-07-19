@@ -12,19 +12,20 @@ const cx = classNames.bind(styles);
 
 function ProfilePage() {
     const auth = useSelector((state) => state.auth);
+    const token = useSelector((state) => state.token);
     const { user, isLogged } = auth;
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    let axiosJWT = createAxios(user, dispatch, dispatchGetUser);
+    let axiosJWT = createAxios(user, token, dispatch, dispatchGetUser);
 
     useEffect(() => {
         if (!isLogged) {
             navigate('/login');
         }
 
-        if (user.accessToken) {
+        if (token) {
             const getUser = () => {
-                return fetchUser(user._id, user.accessToken, axiosJWT).then((res) => {
+                return fetchUser(user._id, token, axiosJWT).then((res) => {
                     dispatch(dispatchGetUser({ ...res.data.user }));
                 });
             };

@@ -5,18 +5,20 @@ import FrameInfo from '../../components/FrameInfo';
 import { AiFillCamera } from 'react-icons/ai';
 import noImage from '~/assets/image/no-image.png';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import { dispatchUpdateUser } from '../../redux/actions/authActions';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaChevronLeft } from 'react-icons/fa';
+import { createAxios } from '../../utils/createInstance';
 
 const cx = classNames.bind(styles);
 
 function EditPage() {
     const { user } = useSelector((state) => state.auth);
+    const token = useSelector((state) => state.token)
     const [error, setError] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    let axiosJWT = createAxios(user, token, dispatch, dispatchUpdateUser);
 
     const initialState = {
         email: user.email,
@@ -50,7 +52,7 @@ function EditPage() {
             setError(true);
         } else {
             try {
-                const res = await axios.put(
+                const res = await axiosJWT.put(
                     `http://localhost:5000/users/edit/` + user._id,
                     {
                         email,
@@ -60,7 +62,7 @@ function EditPage() {
                         bio,
                         image,
                     },
-                    { withCredentials: true },
+                    { headers: { token: `Bearer ${token}` } },
                 );
 
                 dispatch(dispatchUpdateUser({ ...res.data.user }));
