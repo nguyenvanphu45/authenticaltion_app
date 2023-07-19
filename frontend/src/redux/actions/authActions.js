@@ -1,4 +1,3 @@
-import axios from 'axios';
 import ACTIONS from '.';
 
 export const dispatchLogin = (user) => {
@@ -8,22 +7,37 @@ export const dispatchLogin = (user) => {
     }
 }
 
-export const fetchUser = async(id) => {
-    const res = await axios.get("http://localhost:5000/users/" + id);
+export const dispatchGetToken = async (res) => {
+    return {
+        type: ACTIONS.GET_TOKEN,
+        payload: res,
+    };
+};
 
-    return res
-}
+export const fetchUser = async (id, token, axiosJWT) => {
+    const res = await axiosJWT.get('http://localhost:5000/users/' + id, {
+        headers: { token: `Bearer ` + token },
+    });
+
+    return res;
+};
 
 export const dispatchGetUser = (user) => {
     return {
         type: ACTIONS.GET_USER,
-        payload: user
-    }
-}
+        payload: user,
+    };
+};
 
 export const dispatchUpdateUser = (user) => {
     return {
         type: ACTIONS.UPDATE_USER,
-        payload: user
-    }
-}
+        payload: user,
+    };
+};
+
+export const dispatchLogoutUser = () => {
+    return {
+        type: ACTIONS.LOGOUT,
+    };
+};

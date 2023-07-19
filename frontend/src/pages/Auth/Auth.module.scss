@@ -12,28 +12,31 @@
     .form {
         width: 474px;
         min-height: 544px;
-        padding: 48px 58px;
+        padding: 48px 58px 58px;
         border: 1px solid $border-color;
         border-radius: 24px;
 
         .title {
-            margin: 27px 0;
+            margin: 22px 0 27px;
             font-size: 18px;
             font-weight: $weight-bold;
             letter-spacing: $letter-spacing;
 
             .description {
-                margin-top: 15px;
+                margin-top: 14px;
                 font-size: 16px;
                 font-weight: $weight-normal;
                 letter-spacing: $letter-spacing;
             }
         }
 
+        .title-regis {
+            margin-bottom: 35px;
+        }
+
         .input {
             position: relative;
             margin-bottom: 14px;
-            ;
 
             &-icon {
                 position: absolute;
@@ -66,11 +69,11 @@
             font-weight: $weight-bold;
             color: $white-color;
             letter-spacing: $letter-spacing;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .social {
-            margin: 33px 0;
+            margin: 29px 0 33px;
             text-align: center;
 
             span {
@@ -85,7 +88,7 @@
                 display: flex;
                 gap: 21px;
                 justify-content: center;
-                margin-top: 23px;
+                margin-top: 21px;
 
                 span {
                     width: 42px;
@@ -105,6 +108,10 @@
             }
         }
 
+        .social-regis {
+            margin-bottom: 27px;
+        }
+
         .account {
             text-align: center;
             color: $text-color-2;
@@ -116,6 +123,10 @@
                 color: #2D9CDB;
             }
         }
+    }
+
+    .form-regis {
+        padding-bottom: 42px;
     }
 
     .create-by {
@@ -133,6 +144,10 @@
                 text-decoration: underline;
                 font-weight: $weight-bold;
             }
+        }
+
+        .name {
+            display: none;
         }
     }
 }
@@ -159,6 +174,14 @@
         .create-by {
             width: 100%;
             padding: 17px 19px;
+
+            .username {
+                display: none;
+            }
+
+            .name {
+                display: block;
+            }
         }
     }
 }

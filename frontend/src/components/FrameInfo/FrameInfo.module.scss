@@ -5,7 +5,7 @@
     min-height: 581px;
     border-radius: $radius-2;
     border: 1px solid $border-color-2;
-    margin-bottom: 15px;
+    margin-bottom: 14px;
 }
 
 .footer {
@@ -23,5 +23,17 @@
             font-weight: $weight-bold;
             text-decoration: underline;
         }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 598px) { 
+    .form {
+        width: 100%;
+        border: none;
+    }
+
+    .footer {
+        width: 100%;
+        padding: 0 18px;
     }
 }

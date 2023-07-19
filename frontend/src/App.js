@@ -1,6 +1,9 @@
-import { Fragment } from 'react';
+import axios from 'axios';
+import { Fragment, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DefaultLayout from './layout/DefaultLayout';
+import { dispatchGetToken, dispatchGetUser, dispatchLogin, fetchUser } from './redux/actions/authActions';
 import { publicRoutes } from './routes';
 
 function App() {

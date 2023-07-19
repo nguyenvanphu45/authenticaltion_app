@@ -7,12 +7,14 @@ import noImage from '~/assets/image/no-image.png';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { dispatchUpdateUser } from '../../redux/actions/authActions';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaChevronLeft } from 'react-icons/fa';
 
 const cx = classNames.bind(styles);
 
 function EditPage() {
     const { user } = useSelector((state) => state.auth);
+    const [error, setError] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -31,103 +33,116 @@ function EditPage() {
     const handleChangeInput = (e) => {
         const { name, value } = e.target;
 
-        setUserUpdate({ ...user, [name]: value });
+        setUserUpdate({ ...userUpdate, [name]: value });
     };
 
     const handleImage = (e) => {
-        const file = e.target.files[0]
+        const file = e.target.files[0];
         file.preview = URL.createObjectURL(file);
 
-        setUserUpdate({...user, image: file.preview})
-    }
+        setUserUpdate({ ...userUpdate, image: file.preview });
+    };
 
     const hanldeEdit = async (e) => {
         e.preventDefault();
 
-        try {
-            const res = await axios.put(
-                `http://localhost:5000/users/edit/` + user._id,
-                {
-                    email,
-                    password,
-                    name,
-                    phone,
-                    bio,
-                    image,
-                },
-                { withCredentials: true },
-            );
+        if (!email.length || !password.length || !name.length || !phone || !bio.length) {
+            setError(true);
+        } else {
+            try {
+                const res = await axios.put(
+                    `http://localhost:5000/users/edit/` + user._id,
+                    {
+                        email,
+                        password,
+                        name,
+                        phone,
+                        bio,
+                        image,
+                    },
+                    { withCredentials: true },
+                );
 
-            dispatch(dispatchUpdateUser({ ...res.data.user }));
-            navigate('/profile');
-        } catch (err) {
-            console.log(err);
-            // err.response.data.message && setUserUpdate({ ...user });
+                dispatch(dispatchUpdateUser({ ...res.data.user }));
+                navigate('/profile');
+            } catch (err) {
+                console.log(err);
+                // err.response.data.message && setUserUpdate({ ...user });
+            }
         }
     };
 
-    console.log(image);
-
     return (
-        <FrameInfo>
-            <form onSubmit={hanldeEdit} className={cx('container')}>
-                <div className={cx('header')}>
-                    <h3>Change Info</h3>
-                    <p>Changes will be reflected to every services</p>
-                </div>
-                <div className={cx('avatar')}>
-                    <input type="file" hidden id="selectedFile" name="image" onChange={handleImage} />
-                    <label htmlFor="selectedFile">
-                        <img src={image ? image : noImage} alt="" />
-                        <AiFillCamera className={cx('icon')} />
-                    </label>
-                    <p>Change Photo</p>
-                </div>
-                <div className={cx('input')}>
-                    <p>Name</p>
-                    <input defaultValue={name} name="name" onChange={handleChangeInput} placeholder="Enter your name" />
-                </div>
-                <div className={cx('input')}>
-                    <p>Bio</p>
-                    <textarea
-                        defaultValue={bio}
-                        name="bio"
-                        onChange={handleChangeInput}
-                        placeholder="Enter your bio"
-                    ></textarea>
-                </div>
-                <div className={cx('input')}>
-                    <p>Phone</p>
-                    <input
-                        defaultValue={phone}
-                        type="number"
-                        name="phone"
-                        onChange={handleChangeInput}
-                        placeholder="Enter your phone"
-                    />
-                </div>
-                <div className={cx('input')}>
-                    <p>Email</p>
-                    <input
-                        defaultValue={email}
-                        name="email"
-                        onChange={handleChangeInput}
-                        placeholder="Enter your email"
-                    />
-                </div>
-                <div className={cx('input')}>
-                    <p>Password</p>
-                    <input
-                        defaultValue={password}
-                        type="password"
-                        name="password"
-                        onChange={handleChangeInput}
-                        placeholder="Enter your password"
-                    />
-                </div>
-                <button>Save</button>
-            </form>
-        </FrameInfo>
+        <>
+            <div className={cx('back')}>
+                <FaChevronLeft />
+                <Link to="/profile">Back</Link>
+            </div>
+            <FrameInfo>
+                <form onSubmit={hanldeEdit} className={cx('container')}>
+                    <div className={cx('header')}>
+                        <h3>Change Info</h3>
+                        <p>Changes will be reflected to every services</p>
+                    </div>
+                    <div className={cx('avatar')}>
+                        <input type="file" hidden id="selectedFile" name="image" onChange={handleImage} />
+                        <label htmlFor="selectedFile">
+                            <img src={image ? image : noImage} alt="" />
+                            <AiFillCamera className={cx('icon')} />
+                        </label>
+                        <p>Change Photo</p>
+                    </div>
+                    <div className={cx('input', error && !name.length && 'input-error')}>
+                        <p>Name</p>
+                        <input
+                            defaultValue={name}
+                            name="name"
+                            onChange={handleChangeInput}
+                            placeholder="Enter your name"
+                        />
+                    </div>
+                    <div className={cx('input', error && !bio.length && 'input-error')}>
+                        <p>Bio</p>
+                        <textarea
+                            defaultValue={bio}
+                            name="bio"
+                            onChange={handleChangeInput}
+                            placeholder="Enter your bio"
+                        ></textarea>
+                    </div>
+                    <div className={cx('input', error && !phone && 'input-error')}>
+                        <p>Phone</p>
+                        <input
+                            defaultValue={phone}
+                            type="number"
+                            name="phone"
+                            onChange={handleChangeInput}
+                            placeholder="Enter your phone"
+                        />
+                    </div>
+                    <div className={cx('input', error && !email.length && 'input-error')}>
+                        <p>Email</p>
+                        <input
+                            defaultValue={email}
+                            name="email"
+                            onChange={handleChangeInput}
+                            placeholder="Enter your email"
+                        />
+                    </div>
+                    <div className={cx('input', error && !password.length && 'input-error')}>
+                        <p>Password</p>
+                        <input
+                            defaultValue={password}
+                            type="password"
+                            name="password"
+                            onChange={handleChangeInput}
+                            placeholder="Enter your password"
+                        />
+                    </div>
+                    <button>Save</button>
+                </form>
+            </FrameInfo>
+        </>
     );
 }
 

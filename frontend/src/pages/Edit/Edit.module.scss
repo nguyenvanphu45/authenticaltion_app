@@ -1,15 +1,34 @@
 @use '../../scss/' as *;
 
+.back {
+    min-width: 844px;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 24px;
+    color: #2D9CDB;
+    font-size: 18px;
+
+    a {
+        color: #2D9CDB;
+        font-size: 18px;
+        font-weight: $weight-normal;
+    }
+}
+
 .container {
-    padding: 31px 49px;
+    padding: 31px 49px 43px;
 
     .header {
         margin-bottom: 26px;
 
         h3 {
+            color: $black-color;
             font-size: 24px;
             font-weight: $weight-normal;
             letter-spacing: -0.84px;
+            margin-bottom: 4px;
         }
 
         p {
@@ -37,6 +56,18 @@
                 height: 100%;
                 border-radius: $radius-1;
                 object-fit: cover;
+                background: rgba(0, 0, 0, 0.20);
+            }
+            
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.20);
+                border-radius: $radius-1;
             }
 
             .icon {
@@ -47,6 +78,7 @@
                 color: $white-color;
                 width: 24px;
                 height: 24px;
+                z-index: 10;
             }
         }
 
@@ -72,7 +104,7 @@
         input, textarea {
             width: 60%;
             padding: 17px 18px;
-            border: 1px solid $border-color-2;
+            border: 1px solid $text-color-2;
             border-radius: $radius-2;
             font-size: 13px;
             font-weight: 500;
@@ -84,7 +116,17 @@
         }
 
         textarea {
-            height: 92px;
+            max-height: 92px;
+        }
+    }
+
+    .input-error {
+        p {
+            color: #F3115E;
+        }
+
+        input, textarea {
+            border-color: #F3115E;
         }
     }
 
@@ -94,5 +136,22 @@
         font-size: 16px;
         font-weight: 500;
         border-radius: $radius-1;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 598px) {
+    .back {
+        min-width: 100%;
+        padding: 0 22px;
+    }
+
+    .container {
+        padding: 0 22px 43px;
+
+        .input {
+            input, textarea {
+                width: 100%;
+            }
+        }
     }
 }

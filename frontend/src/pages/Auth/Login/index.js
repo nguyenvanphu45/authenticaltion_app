@@ -35,7 +35,7 @@ function LoginPage() {
         e.preventDefault();
         try {
             const res = await axios.post(
-                'http://localhost:5000/users/login',
+                'http://localhost:5000/auth/login',
                 {
                     email,
                     password,
@@ -44,7 +44,7 @@ function LoginPage() {
             );
 
             setUser({ ...user, error: '', success: res.data.message });
-            
+
             dispatch(dispatchLogin({ ...res.data.user }));
             navigate('/')
         } catch (err) {
@@ -99,9 +99,10 @@ function LoginPage() {
                 </p>
             </form>
             <div className={cx('create-by')}>
-                <p>
+                <p className={cx('username')}>
                     created by <span>username</span>
                 </p>
+                <p className={cx('name')}>Your name</p>
                 <p>devChallenges.io</p>
             </div>
         </div>

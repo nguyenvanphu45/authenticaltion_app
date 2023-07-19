@@ -7,15 +7,20 @@ import { BiUser, BiSolidGroup } from 'react-icons/bi';
 import { BsCaretDownFill } from 'react-icons/bs';
 import { TbLogout } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Popper from '../../../components/Popper';
+import { dispatchLogoutUser } from '../../../redux/actions/authActions';
 
 const cx = classNames.bind(styles);
 
 function Header() {
     const auth = useSelector((state) => state.auth);
-
     const { user, isLogged } = auth;
+    const dispatch = useDispatch();
+
+    const logout = async () => {
+        dispatch(dispatchLogoutUser());
+    };
 
     const userMenu = [
         {
@@ -31,7 +36,8 @@ function Header() {
         {
             icon: <TbLogout />,
             title: 'Logout',
-            to: '/logout',
+            to: '/',
+            onClick: logout,
         },
     ];
 

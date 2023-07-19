@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import styles from './Profile.module.scss';
 import classNames from 'classnames/bind';
 import FrameInfo from '../../components/FrameInfo';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchGetUser, fetchUser } from '../../redux/actions/authActions';
+import { createAxios } from '../../utils/createInstance';
 import noImage from '~/assets/image/no-image.png';
 
 const cx = classNames.bind(styles);
@@ -14,15 +14,23 @@ function ProfilePage() {
     const auth = useSelector((state) => state.auth);
     const { user, isLogged } = auth;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    let axiosJWT = createAxios(user, dispatch, dispatchGetUser);
 
     useEffect(() => {
-        const getUser = () => {
-            return fetchUser(user._id).then((res) => {
-                dispatch(dispatchGetUser({ ...res.data.user }));
-            });
-        };
-        getUser();
-    }, [user._id, dispatch]);
+        if (!isLogged) {
+            navigate('/login');
+        }
+
+        if (user.accessToken) {
+            const getUser = () => {
+                return fetchUser(user._id, user.accessToken, axiosJWT).then((res) => {
+                    dispatch(dispatchGetUser({ ...res.data.user }));
+                });
+            };
+            getUser();
+        }
+    }, []);
 
     return (
         <>
@@ -42,13 +50,13 @@ function ProfilePage() {
                 </div>
                 <div className={cx('frame-body')}>
                     <div className={cx('border')}>
-                        <div className={cx('padding')}>
+                        <div className={cx('padding', 'padding-img')}>
                             <p>Photo</p>
                             <img src={!user.image ? noImage : user.image} alt="" />
                         </div>
                     </div>
                     <div className={cx('border')}>
-                        <div className={cx('padding')}>
+                        <div className={cx('padding', 'padding-name')}>
                             <p>Name</p>
                             <h4>{user.name}</h4>
                         </div>
@@ -74,7 +82,7 @@ function ProfilePage() {
                     <div className={cx('border')}>
                         <div className={cx('padding')}>
                             <p>Password</p>
-                            <h4>************</h4>
+                            <input type="test" readOnly value={user.password} />
                         </div>
                     </div>
                 </div>

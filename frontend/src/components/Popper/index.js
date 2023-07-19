@@ -11,7 +11,7 @@ function Popper({ children, items }) {
         return items.map((item, index) => {
             return (
                 <li key={index}>
-                    <Link to={item.to}>{item.icon} {item.title}</Link>
+                    <Link to={item.to} onClick={item.onClick}>{item.icon} {item.title}</Link>
                 </li>
             );
         });

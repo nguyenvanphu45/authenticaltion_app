@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const cookies = require('cookie-parser');
+
 const app = express();
 
 dotenv.config();
@@ -14,6 +16,8 @@ db.connect();
 
 // HTTP logger
 app.use(morgan('combined'));
+
+app.use(cookies())
 
 const corsOptions = {
     origin: 'http://localhost:3000',

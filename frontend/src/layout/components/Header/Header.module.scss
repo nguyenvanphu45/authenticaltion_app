@@ -27,3 +27,9 @@
         }
     }
 }
+
+@media only screen and (min-width: 320px) and (max-width: 598px) {
+    .header {
+        margin: 0 18px 38px;
+    }
+}

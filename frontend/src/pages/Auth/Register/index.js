@@ -6,8 +6,7 @@ import { FaFacebookSquare } from 'react-icons/fa';
 import { BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs';
 import { MdMail } from 'react-icons/md';
 import { BiSolidLock } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { showErrMsg, showSuccessMsg } from '../../../components/Notification';
 
@@ -20,7 +19,7 @@ const initialState = {
 
 function RegisterPage() {
     const [user, setUser] = useState(initialState);
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { email, password, err, success } = user;
 
@@ -33,7 +32,7 @@ function RegisterPage() {
         e.preventDefault();
         try {
             const res = await axios.post(
-                'http://localhost:5000/users/register',
+                'http://localhost:5000/auth/register',
                 {
                     email,
                     password,
@@ -42,8 +41,7 @@ function RegisterPage() {
             );
 
             setUser({ ...user, err: '', success: res.data.message });
-
-            // dispatch(dispatchLogin());
+            navigate('/login');
         } catch (err) {
             console.log(err);
             err.response.data.message && setUser({ ...user, err: err.response.data.message, success: '' });
@@ -52,9 +50,9 @@ function RegisterPage() {
 
     return (
         <div className={cx('wrapper')}>
-            <form className={cx('form')} onSubmit={handleSubmit}>
+            <form className={cx('form', 'form-regis')} onSubmit={handleSubmit}>
                 <img src={imageSvg.logo} alt="" />
-                <div className={cx('title')}>
+                <div className={cx('title', 'title-regis')}>
                     <h3>Join thousands of learners from around the world</h3>
                     <p className={cx('description')}>
                         Master web development by making real-life projects. There are multiple paths for you to choose
@@ -77,7 +75,7 @@ function RegisterPage() {
                 {err && showErrMsg(err)}
                 {success && showSuccessMsg(success)}
                 <button className={cx('btn')}>Start coding now</button>
-                <div className={cx('social')}>
+                <div className={cx('social', 'social-regis')}>
                     <span>or continue with these social profile</span>
                     <div className={cx('icons')}>
                         <span>
@@ -99,9 +97,10 @@ function RegisterPage() {
                 </p>
             </form>
             <div className={cx('create-by')}>
-                <p>
+                <p className={cx('username')}>
                     created by <span>username</span>
                 </p>
+                <p className={cx('name')}>Your name</p>
                 <p>devChallenges.io</p>
             </div>
         </div>
