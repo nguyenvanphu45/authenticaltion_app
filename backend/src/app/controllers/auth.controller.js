@@ -116,7 +116,7 @@ const authController = {
 
             jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
                 if (err) {
-                    console.log(err);
+                    return res.status(401).json({message: "Not token!"})
                 }
 
                 const newAccessToken = authController.generateAccessToken(user);

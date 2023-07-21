@@ -1,17 +1,6 @@
 const User = require('../models/users');
 const bcrypt = require('bcrypt');
 
-function validateEmail(email) {
-    const re =
-        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    return re.test(email);
-}
-
-function validatePassword(password) {
-    const re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
-    return re.test(password);
-}
-
 const usersController = {
     // [GET] /users/:id
     fineOne: async (req, res) => {
@@ -36,11 +25,16 @@ const usersController = {
     // [PUT] /users/edit/:id
     update: async (req, res) => {
         try {
-            const { ...rest } = req.body;
+            const { password, ...rest } = req.body;
+
+            if (password) {
+                const passwordHash = await bcrypt.hash(password, 12);
+                res.password = passwordHash;
+            }
 
             const updatedUser = await User.findByIdAndUpdate(
                 req.params.id,
-                { $set: {...rest} },
+                { $set: { password: res.password }, ...rest },
                 { new: true },
             );
 
