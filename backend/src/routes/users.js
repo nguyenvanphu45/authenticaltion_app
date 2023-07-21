@@ -1,10 +1,10 @@
 const express = require('express');
-const middlewareController = require('../app/controllers/middlewareController');
+const middleware = require('../app/middleware/authentication');
 const router = express.Router();
 
-const usersController = require('../app/controllers/usersController');
+const usersController = require('../app/controllers/users.controller');
 
-router.get('/:id', middlewareController.verifyToken, usersController.getUser);
-router.put('/edit/:id', middlewareController.verifyToken, usersController.update);
+router.get('/:id', middleware.verifyToken, usersController.fineOne);
+router.put('/edit/:id', middleware.verifyToken, usersController.update);
 
 module.exports = router;

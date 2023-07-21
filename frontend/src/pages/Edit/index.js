@@ -9,12 +9,14 @@ import { dispatchUpdateUser } from '../../redux/actions/authActions';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaChevronLeft } from 'react-icons/fa';
 import { createAxios } from '../../utils/createInstance';
+import validator from 'validator';
 
 const cx = classNames.bind(styles);
+const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
 
 function EditPage() {
     const { user } = useSelector((state) => state.auth);
-    const token = useSelector((state) => state.token)
+    const token = useSelector((state) => state.token);
     const [error, setError] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -31,11 +33,19 @@ function EditPage() {
     const [userUpdate, setUserUpdate] = useState(initialState);
 
     const { email, password, name, phone, bio, image } = userUpdate;
+    console.log('password: ', password);
 
     const handleChangeInput = (e) => {
         const { name, value } = e.target;
 
-        setUserUpdate({ ...userUpdate, [name]: value });
+        setUserUpdate({
+            ...userUpdate,
+            [name]: validator.trim(value),
+        });
+    };
+
+    const validatePassword = (password) => {
+        return regex.test(password);
     };
 
     const handleImage = (e) => {
@@ -48,12 +58,12 @@ function EditPage() {
     const hanldeEdit = async (e) => {
         e.preventDefault();
 
-        if (!email.length || !password.length || !name.length || !phone || !bio.length) {
+        if (!email.length || !password.length || !name.length || !phone || !bio.length || !validatePassword(password)) {
             setError(true);
         } else {
             try {
                 const res = await axiosJWT.put(
-                    `http://localhost:5000/users/edit/` + user._id,
+                    `http://10.10.23.32:5000/users/edit/` + user._id,
                     {
                         email,
                         password,
@@ -131,10 +141,16 @@ function EditPage() {
                             placeholder="Enter your email"
                         />
                     </div>
-                    <div className={cx('input', error && !password.length && 'input-error')}>
+                    <div
+                        className={cx(
+                            'input',
+                            error && (!password.length || !validatePassword(password)) && 'input-error',
+                        )}
+                    >
                         <p>Password</p>
                         <input
-                            defaultValue={password}
+                            // defaultValue={password}
+                            value={password.substring(0, 10)}
                             type="password"
                             name="password"
                             onChange={handleChangeInput}

@@ -17,10 +17,10 @@ db.connect();
 // HTTP logger
 app.use(morgan('combined'));
 
-app.use(cookies())
+app.use(cookies());
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'http://10.10.23.32:3000',
     credentials: true, //access-control-allow-credentials:true
     optionSuccessStatus: 200,
 };
@@ -37,5 +37,5 @@ app.use(express.json());
 route(app);
 
 app.listen(PORT, () => {
-    console.log(`Server running on port: http://localhost:${PORT}`);
+    console.log(`Server running on port: http://10.10.23.32:${PORT}`);
 });

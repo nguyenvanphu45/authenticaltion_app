@@ -35,7 +35,7 @@ function LoginPage() {
         e.preventDefault();
         try {
             const res = await axios.post(
-                'http://localhost:5000/auth/login',
+                'http://10.10.23.32:5000/auth/login',
                 {
                     email,
                     password,
@@ -44,10 +44,10 @@ function LoginPage() {
             );
 
             setUser({ ...user, error: '', success: res.data.message });
-            
+
             dispatch(dispatchLogin({ ...res.data.user }));
             dispatch({ type: 'GET_TOKEN', payload: res.data.user.accessToken });
-            navigate('/')
+            navigate('/');
         } catch (err) {
             console.log(err);
             err.response.data.message && setUser({ ...user, err: err.response.data.message, success: '' });

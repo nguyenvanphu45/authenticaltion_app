@@ -14,7 +14,7 @@ function validatePassword(password) {
 
 const usersController = {
     // [GET] /users/:id
-    getUser: async (req, res) => {
+    fineOne: async (req, res) => {
         try {
             const user = await User.findById(req.params.id);
 
@@ -36,16 +36,11 @@ const usersController = {
     // [PUT] /users/edit/:id
     update: async (req, res) => {
         try {
-            const { password, ...rest } = req.body;
-
-            if (password) {
-                const passwordHash = await bcrypt.hash(password, 12);
-                res.password = passwordHash;
-            }
+            const { ...rest } = req.body;
 
             const updatedUser = await User.findByIdAndUpdate(
                 req.params.id,
-                { $set: { password: res.password }, ...rest },
+                { $set: {...rest} },
                 { new: true },
             );
 

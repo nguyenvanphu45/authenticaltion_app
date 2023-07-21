@@ -23,8 +23,8 @@ function Header() {
 
     const logout = async () => {
         try {
-            await axiosJWT.post('http://localhost:5000/auth/logout', user._id, {
-                headers: {token: `Bearer ${token}`}
+            await axiosJWT.post('http://10.10.23.32:5000/auth/logout', user._id, {
+                headers: { token: `Bearer ${token}` },
             });
             dispatch(dispatchLogoutUser());
         } catch (error) {

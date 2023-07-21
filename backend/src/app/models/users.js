@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const validateEmail =
+const regexEmail =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-const validatePassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
+const regexPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
 
 const userSchema = new mongoose.Schema(
     {
@@ -12,27 +12,31 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Please fill in all fields!'],
             unique: true,
-            match: [validateEmail, 'Email or Password incorrect!'],
+            match: [regexEmail, 'Email or Password incorrect!'],
         },
         password: {
             type: String,
             minlength: [6, 'Password at least 6 characters!'],
             required: [true, 'Please fill in all fields!'],
-            match: [validatePassword, 'Email or Password incorrect!'],
+            match: [regexPassword, 'Email or Password incorrect!'],
         },
         name: {
             type: String,
+            default: '',
         },
         phone: {
             type: String,
+            default: null,
         },
         bio: {
             type: String,
             maxlength: 150,
             minlength: 0,
+            default: '',
         },
         image: {
             type: String,
+            default: undefined,
         },
     },
     { timestamps: true },

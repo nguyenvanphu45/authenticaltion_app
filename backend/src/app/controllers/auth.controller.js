@@ -44,9 +44,9 @@ const authController = {
                 let err = Object.values(error.errors)
                     .map((val) => val.message)
                     .join();
-                return res.status(404).json({ msg: err });
+                return res.status(500).json({ msg: err });
             }
-            return res.status(404).json({ msg: error.message });
+            return res.status(500).json({ msg: error.message });
         }
     },
 
@@ -66,10 +66,6 @@ const authController = {
             let newUser = await new User({
                 email: email,
                 password: password,
-                name: '',
-                phone: null,
-                bio: '',
-                image: undefined,
             });
 
             let user = await newUser.save();
@@ -83,9 +79,9 @@ const authController = {
                 let err = Object.values(error.errors)
                     .map((val) => val.message)
                     .join();
-                return res.status(404).json({ msg: err });
+                return res.status(500).json({ msg: err });
             }
-            return res.status(404).json({ msg: error.message });
+            return res.status(500).json({ msg: error.message });
         }
     },
 
@@ -135,7 +131,7 @@ const authController = {
                 res.status(200).json({ accessToken: newAccessToken });
             });
         } catch (error) {
-            return res.status(404).json({ msg: error.message });
+            return res.status(500).json({ msg: error.message });
         }
     },
 
