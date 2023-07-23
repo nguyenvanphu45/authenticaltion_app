@@ -35,13 +35,15 @@ function LoginPage() {
         e.preventDefault();
         try {
             const res = await axios.post(
-                'http://10.10.23.32:5000/auth/login',
+                'http://localhost:5000/auth/login',
                 {
                     email,
                     password,
                 },
                 { withCredentials: true },
             );
+
+            console.log(res);
 
             setUser({ ...user, error: '', success: res.data.message });
 

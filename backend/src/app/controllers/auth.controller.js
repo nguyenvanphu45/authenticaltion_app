@@ -11,26 +11,20 @@ const authController = {
             let { email, password } = req.body;
 
             const user = await User.findOne({ email });
-            if (!user) {
+            if (!user || !user.comparePassword(password)) {
                 return res.status(400).json({
                     message: 'Email or Password incorrect!',
                 });
             }
-            user.comparePassword(password, (err, match) => {
-                if (!match) {
-                    return res.status(400).json({
-                        message: 'Email or Password incorrect!',
-                    });
-                }
-            });
 
             const accessToken = authController.generateAccessToken(user);
             const refreshToken = authController.generateRefreshToken(user);
 
-            res.cookie('refreshToken', refreshToken, {
+            res.cookie('refresh', refreshToken, {
                 httpOnly: true,
                 path: '/',
-                sameSite: 'strict',
+                secure: true,
+                sameSite: 'lax',
             });
 
             const { ...others } = user._doc;
@@ -91,7 +85,7 @@ const authController = {
                 id: user.id,
             },
             process.env.JWT_ACCESS_KEY,
-            { expiresIn: '10m' },
+            { expiresIn: '60m' },
         );
     },
 
@@ -108,7 +102,7 @@ const authController = {
     // [POST] /auth/refresh
     requestRefreshToken: async (req, res) => {
         try {
-            const refreshToken = req.cookies.refreshToken;
+            const refreshToken = req.cookies.refresh;
 
             if (!refreshToken) {
                 return res.status(400).json({ message: 'Please login now!' });
@@ -116,7 +110,7 @@ const authController = {
 
             jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
                 if (err) {
-                    return res.status(401).json({message: "Not token!"})
+                    return res.status(401).json({ message: 'Not token!' });
                 }
 
                 const newAccessToken = authController.generateAccessToken(user);
@@ -137,9 +131,9 @@ const authController = {
 
     // [POST] /auth/logout
     logout: async (req, res) => {
-        res.clearCookie("refreshToken")
-        res.status(200).json({msg: "Logged out!"})
-    }
+        res.clearCookie('refreshToken');
+        res.status(200).json({ msg: 'Logged out!' });
+    },
 };
 
 module.exports = authController;

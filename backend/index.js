@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const cookies = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -15,16 +15,25 @@ const route = require('./src/routes');
 db.connect();
 
 // HTTP logger
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 
-app.use(cookies());
+app.use(cookieParser());
 
-const corsOptions = {
-    origin: 'http://10.10.23.32:3000',
-    credentials: true, //access-control-allow-credentials:true
-    optionSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+        credentials: true,
+        optionSuccessStatus: 200,
+    }),
+);
+
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 
 app.use(
     express.urlencoded({
@@ -37,5 +46,5 @@ app.use(express.json());
 route(app);
 
 app.listen(PORT, () => {
-    console.log(`Server running on port: http://10.10.23.32:${PORT}`);
+    console.log(`Server running on port: http://localhost:${PORT}`);
 });

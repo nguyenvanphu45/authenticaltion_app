@@ -3,8 +3,9 @@ import jwt_decode from 'jwt-decode';
 
 const refreshToken = async () => {
     try {
-        const res = await axios.post('http://10.10.23.32:5000/auth/refresh', {
+        const res = await axios.post('http://localhost:5000/auth/refresh', {
             withCredentials: true,
+            credentials: 'include',
         });
         return res.data;
     } catch (error) {

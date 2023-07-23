@@ -33,8 +33,6 @@ function EditPage() {
     const [userUpdate, setUserUpdate] = useState(initialState);
 
     const { email, password, name, phone, bio, image } = userUpdate;
-    console.log('password: ', password);
-
     const handleChangeInput = (e) => {
         const { name, value } = e.target;
 
@@ -63,7 +61,7 @@ function EditPage() {
         } else {
             try {
                 const res = await axiosJWT.put(
-                    `http://10.10.23.32:5000/users/edit/` + user._id,
+                    `http://localhost:5000/users/edit/` + user._id,
                     {
                         email,
                         password,
@@ -149,8 +147,7 @@ function EditPage() {
                     >
                         <p>Password</p>
                         <input
-                            // defaultValue={password}
-                            value={password.substring(0, 10)}
+                            defaultValue={password.substring(0, 10)}
                             type="password"
                             name="password"
                             onChange={handleChangeInput}
