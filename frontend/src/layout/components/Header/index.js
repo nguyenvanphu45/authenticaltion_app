@@ -8,7 +8,7 @@ import { BsCaretDownFill } from 'react-icons/bs';
 import { TbLogout } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Popper from '../../../components/Popper';
+import Menu from '../../../components/Popper/Menu';
 import { dispatchLogoutUser } from '../../../redux/actions/authActions';
 import { createAxios } from '../../../utils/createInstance';
 
@@ -41,7 +41,7 @@ function Header() {
         {
             icon: <BiSolidGroup />,
             title: 'Group chat',
-            to: '/group',
+            to: '/chat',
         },
         {
             icon: <TbLogout />,
@@ -55,12 +55,12 @@ function Header() {
         <div className={cx('header')}>
             <img src={imageSvg.logo} alt="" />
             {isLogged ? (
-                <Popper items={userMenu}>
+                <Menu items={userMenu}>
                     <div className={cx('user')}>
                         {user.email}
                         <BsCaretDownFill className={cx('icon-down')} />
                     </div>
-                </Popper>
+                </Menu>
             ) : (
                 <Link to="/login" className={cx('user')}>
                     <BiUser className={cx('icon-user')} />
