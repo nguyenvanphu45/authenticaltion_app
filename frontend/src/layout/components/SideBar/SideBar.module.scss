@@ -1,0 +1,75 @@
+@use '../../../scss/' as *;
+
+.container {
+    min-width: 324px;
+    height: 100vh;
+    background-color: $bg-color-dark;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    .header {
+        .title {
+            padding: 17px 21px 17px 33px;
+            color: $text-color-3;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        
+            h3 {
+                font-size: 18px;
+                font-weight: 700;
+            }
+        
+            button {
+                background-color: transparent;
+
+                img {
+                    cursor: pointer;
+                    background-color: $bg-color-dark-2;
+                    border-radius: $radius-1;
+                }
+            }
+        }
+    }
+
+    .footer {
+        // min-height: 75px;
+        background-color: #0B090C;
+        padding: 15px 26px 18px 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .user {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+
+            img {
+                width: 42px;
+                height: 42px;
+                border-radius: 7px;
+                background-color: lightgray 50%;
+                background-size: cover;
+            }
+
+            h2 {
+                color: $text-color-2;
+                font-size: 18px;
+                font-weight: 700;
+            }
+        }
+
+        .icon-down {
+            font-size: 24px;
+            color: $text-color-4;
+            cursor: pointer;
+
+            &:hover {
+                transform: rotate(180deg);
+            }
+        }
+
+    }
+}

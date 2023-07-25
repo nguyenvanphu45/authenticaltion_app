@@ -147,7 +147,7 @@ function EditPage() {
                     >
                         <p>Password</p>
                         <input
-                            defaultValue={password.substring(0, 10)}
+                            defaultValue={password}
                             type="password"
                             name="password"
                             onChange={handleChangeInput}

@@ -1,0 +1,61 @@
+@use '../../../scss/' as * ;
+
+.search {
+    margin: 19px 25px 0 33px;
+
+    &-input {
+        position: relative;
+
+        svg {
+            position: absolute;
+            top: 50%;
+            left: 9px;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: $white-color;
+        }
+
+        input {
+            width: 100%;
+            min-height: 48px;
+            background-color: #3C393F;
+            border-radius: $radius-1;
+            padding: 9px 9px 9px 44px;
+            color: $text-color-2;
+            font-size: 14px;
+            text-transform: capitalize;
+
+            &:focus {
+                color: $text-color-4;
+            }
+        }
+    }
+
+    &-list {
+        margin-top: 35px;
+        display: flex;
+        flex-direction: column;
+        gap: 21px;
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+
+            img {
+                width: 42px;
+                height: 42px;
+                border-radius: $radius-1;
+                background-size: cover;
+            }
+
+            p {
+                color: $text-color-4;
+                font-size: 18px;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+        }
+    }
+}

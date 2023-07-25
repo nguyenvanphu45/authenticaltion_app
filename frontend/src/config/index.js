@@ -3,7 +3,9 @@ const routes = {
     login: '/login',
     register: '/register',
     profile: '/profile',
-    edit: '/edit/:id'
+    edit: '/edit/:id',
+    chat: '/chat',
+    message: '/chat/:id'
 };
 
 export default routes;

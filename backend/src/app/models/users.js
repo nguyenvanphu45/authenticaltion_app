@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const { createCanvas } = require('canvas');
 
 const regexEmail =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -36,7 +37,24 @@ const userSchema = new mongoose.Schema(
         },
         image: {
             type: String,
-            default: undefined,
+            default: ({email}) => {
+                const canvas = createCanvas(100, 100);
+                const firstChar = email[0].toUpperCase();
+                const ctx = canvas.getContext('2d');
+
+                ctx.fillStyle = 'blue';
+                ctx.fillRect(0, 0, 100, 100);
+
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = '70px Arial';
+                ctx.fillStyle = 'white';
+                ctx.fillText(firstChar, 50, 50);
+
+                const buffer = canvas.toBuffer('image/png');
+                const url = `data:image/png;base64,${buffer.toString('base64')}`;
+                return url;
+            },
         },
     },
     { timestamps: true },

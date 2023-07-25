@@ -33,4 +33,6 @@ a {
 input, textarea {
     font-family: $font-family;
     resize: none;
+    outline: none;
+    border: none;
 }
