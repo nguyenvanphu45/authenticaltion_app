@@ -4,9 +4,9 @@ const chatService = {
     findAllGroup: () => {
         return new Promise(async (resolve, reject) => {
             try {
-                let chats = await Chat.find()
+                let chats = await Chat.find();
 
-                resolve(chats)
+                resolve(chats);
             } catch (e) {
                 reject(e);
             }
@@ -31,6 +31,26 @@ const chatService = {
                     .populate('groupAdmin', '-password');
 
                 resolve(fullGroupChat);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    },
+    fetchMember: (id) => {
+        return new Promise((resolve, reject) => {
+            try {
+                Chat.find({ users: { $elemMatch: { $eq: id } } })
+                    .populate('users', '-password')
+                    .populate('groupAdmin', '-password')
+                    .populate('latestMessage')
+                    .sort({ updateAt: -1 })
+                    .then(async (results) => {
+                        results = await User.populate(results, {
+                            path: 'latestMessage.sender',
+                            select: "name description pic"
+                        });
+                        resolve(results)
+                    })
             } catch (e) {
                 reject(e);
             }

@@ -4,14 +4,7 @@ const usersController = {
     // [GET] /users/
     findAll: async (req, res) => {
         try {
-            let keyword = req.query.search
-                ? {
-                      $or: [
-                          { name: { $regex: req.query.search, $options: 'i' } },
-                          { email: { $regex: req.query.search, $options: 'i' } },
-                      ],
-                  }
-                : {};
+            let keyword = req.query.search ? { name: { $regex: req.query.search, $options: 'i' } } : {};
             let response = await usersService.findAll(keyword, req.user.id);
             res.status(200).json(response);
         } catch (error) {

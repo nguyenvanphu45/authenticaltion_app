@@ -15,6 +15,14 @@ export const fetchChat = async (token, axiosJWT) => {
     return res
 };
 
+export const fetchMember = async (token, axios) => {
+    const res = await axios.get('/chat/member', {
+        headers: { token: `Bearer ` + token },
+    });
+
+    return res;
+}
+
 export const dispatchGetChat = (chat) => {
     return {
         type: ACTIONS.GET_CHAT,

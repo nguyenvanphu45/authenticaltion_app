@@ -17,7 +17,14 @@ const usersService = {
             }
         });
     },
-
+    findUserByKeyword: () => {
+        return new Promise(async (resolve, reject) => {
+            try {
+            } catch (e) {
+                reject(e);
+            }
+        });
+    },
     findOne: (id) => {
         return new Promise(async (resolve, reject) => {
             try {
