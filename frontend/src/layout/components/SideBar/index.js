@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './SideBar.module.scss';
 import classNames from 'classnames/bind';
 import imageSvg from '~/assets/svg';
-import noImage from '~/assets/image/no-image.png';
-import { AiOutlineSearch } from 'react-icons/ai';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle, FaChevronLeft } from 'react-icons/fa';
 import { TbLogout } from 'react-icons/tb';
 import { FiChevronDown } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,10 +11,9 @@ import { createAxios } from '../../../utils/createInstance';
 import { dispatchLogoutUser } from '../../../redux/actions/authActions';
 import Modal from 'react-modal';
 import FormModal from '../../../components/FormModal';
-import { dispatchGetChat, fetchChat } from '../../../redux/actions/chatActions';
-import { Link } from 'react-router-dom';
 import Search from '../Search';
 import Channel from '../Channel';
+import { Link, useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -41,6 +38,7 @@ function SideBar({ chat }) {
     const [openModal, setOpenModal] = useState(false);
     const user = useSelector((state) => state.auth.user);
     const token = useSelector((state) => state.token);
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
     let axiosJWT = createAxios(user, token, dispatch, dispatchLogoutUser);
@@ -79,15 +77,20 @@ function SideBar({ chat }) {
         setOpenModal(false);
     };
 
+    const handleBack = () => {
+        navigate('/chat');
+    };
+
     return (
         <div className={cx('container')}>
             <div className={cx('header')}>
                 {chat ? (
                     <div className={cx('title')}>
+                        <FaChevronLeft onClick={handleBack} />
                         <h3>All Channel</h3>
                     </div>
                 ) : (
-                    <div className={cx('title')}>
+                    <div className={cx('title', 'space')}>
                         <h3>Channels</h3>
                         <button onClick={() => setOpenModal(true)}>
                             <img src={imageSvg.plus} alt="" />
@@ -104,7 +107,7 @@ function SideBar({ chat }) {
                     <img src={user.image} alt="" />
                     <h2>{user.name}</h2>
                 </div>
-                <Menu items={userMenu}>
+                <Menu items={userMenu} sidebar>
                     <div>
                         <FiChevronDown className={cx('icon-down')} />
                     </div>

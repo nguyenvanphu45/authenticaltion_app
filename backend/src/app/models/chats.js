@@ -41,10 +41,10 @@ const chatSchema = new mongoose.Schema(
                 required: [true, 'Please fill all the fields!'],
             },
         ],
-        // latestMessage: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: 'Message',
-        // },
+        latestMessage: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Message',
+        },
         groupAdmin: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',

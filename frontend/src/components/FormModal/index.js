@@ -4,11 +4,11 @@ import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react/headless';
 import Popper from '../Popper/Popper';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { FaSpinner } from 'react-icons/fa';
+import { FaSpinner } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
+import imageSvg from '~/assets/svg';
 import useDebounce from '../../hooks/useDebounce';
 import axios from 'axios';
-import validator from 'validator';
 import { dispatchCreateGroup } from '../../redux/actions/chatActions';
 
 const cx = classNames.bind(styles);
@@ -34,6 +34,21 @@ function FormModal({ onClose }) {
 
     const debounced = useDebounce(search, 500);
 
+    const fetchApi = async () => {
+        try {
+            setLoading(true);
+            const { data } = await axios.get(`/users?search=${debounced}`, {
+                headers: { token: `Bearer ${token}` },
+            });
+            setSearchResult(data.users);
+            setLoading(false);
+        } catch (error) {
+            setLoading(true);
+            console.log(error);
+        }
+    };
+
+    
     useEffect(() => {
         if (!debounced.trim()) {
             setSearchResult([]);
@@ -41,20 +56,6 @@ function FormModal({ onClose }) {
         }
 
         setLoading(true);
-
-        const fetchApi = async () => {
-            try {
-                setLoading(true);
-                const { data } = await axios.get(`/users?search=${debounced}`, {
-                    headers: { token: `Bearer ${token}` },
-                });
-                setSearchResult(data.users);
-                setLoading(false);
-            } catch (error) {
-                setLoading(true);
-                console.log(error);
-            }
-        };
 
         fetchApi();
     }, [debounced]);
@@ -76,6 +77,15 @@ function FormModal({ onClose }) {
         setSelectedUsers([...selectedUsers, result]);
     };
 
+    const handleDelete = (delUser) => {
+        setSelectedUsers(selectedUsers.filter((sel) => sel._id !== delUser._id));
+    };
+
+    const handleFocus = () => {
+        fetchApi();
+        setShowResult(true);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -95,9 +105,7 @@ function FormModal({ onClose }) {
                     },
                 );
 
-                console.log(res.data)
-
-                dispatch(dispatchCreateGroup({...res.data}));
+                dispatch(dispatchCreateGroup({ ...res.data }));
                 onClose();
             } catch (error) {
                 console.log(error);
@@ -146,28 +154,27 @@ function FormModal({ onClose }) {
                     )}
                     onClickOutside={handleHideResult}
                 >
-                    <div className={cx('content')}>
-                        <div className={cx('add')}>
-                            <input
-                                type="text"
-                                placeholder="Add Members"
-                                value={search}
-                                className={cx('input', error && selectedUsers.length < 2 && 'input-error')}
-                                name="search"
-                                onChange={handleChangeInput}
-                                onFocus={() => setShowResult(true)}
-                            />
-                            {loading ? (
-                                <FaSpinner className={cx('loading')} />
-                            ) : (
-                                <AiOutlineSearch className={cx('icon')} />
-                            )}
-                        </div>
+                    <div className={cx('add')}>
                         <div className={cx('box')}>
                             {selectedUsers.map((user) => {
-                                return <p>{user.name}</p>;
+                                return (
+                                    <button className={cx('box-item')} onClick={() => handleDelete(user)}>
+                                        <p>{user.name}</p>
+                                        <img src={imageSvg.close} alt="" className={cx('icon-close')} />
+                                    </button>
+                                );
                             })}
                         </div>
+                        <input
+                            type="text"
+                            placeholder="Add Members"
+                            value={search}
+                            className={cx('input', 'input-search', error && selectedUsers.length < 2 && 'input-error')}
+                            name="search"
+                            onChange={handleChangeInput}
+                            onFocus={handleFocus}
+                        />
+                        {loading ? <FaSpinner className={cx('loading')} /> : <AiOutlineSearch className={cx('icon')} />}
                     </div>
                 </Tippy>
             </div>

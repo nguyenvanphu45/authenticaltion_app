@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function Menu({ children, items }) {
+function Menu({ children, items, sidebar }) {
     const renderItems = () => {
         return items.map((item, index) => {
             return (
@@ -20,7 +20,7 @@ function Menu({ children, items }) {
     };
 
     const renderResult = (attrs) => (
-        <div className={cx('wrapper', 'wrapper-dark')} tabIndex="-1" {...attrs}>
+        <div className={cx('wrapper', sidebar &&'wrapper-dark')} tabIndex="-1" {...attrs}>
             <ul className={cx('menu')}>{renderItems()}</ul>
         </div>
     );

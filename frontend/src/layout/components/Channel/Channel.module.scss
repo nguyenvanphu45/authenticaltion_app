@@ -1,6 +1,7 @@
 @use '../../../scss/' as *;
 
 .container {
+    width: 324px;
     padding: 25px 33px;
 
     h3 {
@@ -20,5 +21,30 @@
         font-size: 18px;
         font-weight: 400;
         margin-bottom: 43px;
+    }
+
+    .member {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+
+        &-item {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+
+            img {
+                width: 42px;
+                height: 42px;
+                border-radius: 7px;
+            }
+
+            h4 {
+                color: $text-color-2;
+                font-size: 18px;
+                font-weight: 700;
+            }
+        }
+
     }
 }

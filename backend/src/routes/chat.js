@@ -6,5 +6,6 @@ const chatController = require('../app/controllers/chat.controller');
 
 router.get('/', middleware.verifyToken, chatController.findAllGroup)
 router.post('/create', middleware.verifyToken, chatController.create);
+router.get('/member', middleware.verifyToken, chatController.fetchMember);
 
 module.exports = router;
