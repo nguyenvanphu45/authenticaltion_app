@@ -2,6 +2,7 @@
 
 .container {
     min-width: 324px;
+    overflow: hidden;
     height: 100vh;
     background-color: $bg-color-dark;
     display: flex;
@@ -9,6 +10,7 @@
     justify-content: space-between;
     
     .header {
+        height: calc(100% - 75px);
         .title {
             padding: 17px 21px 17px 33px;
             color: $text-color-3;
@@ -47,7 +49,7 @@
     .footer {
         // min-height: 75px;
         background-color: #0B090C;
-        padding: 15px 26px 18px 28px;
+        padding: 15px 24px 18px 28px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -72,15 +74,28 @@
             }
         }
 
-        .icon-down {
-            font-size: 24px;
-            color: $text-color-4;
-            cursor: pointer;
-
-            &:hover {
-                transform: rotate(180deg);
+        .icon {
+            width: 24px;
+            height: 24px;
+            .icon-down {
+                width: 100%;
+                height: 100%;
+                color: $text-color-4;
+                cursor: pointer;
+    
+                &:hover {
+                    transform: rotate(180deg);
+                }
             }
         }
 
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 598px) {
+    .container {
+        overflow-x: hidden;
+        min-width: 90%;
+        width: 94%;
     }
 }

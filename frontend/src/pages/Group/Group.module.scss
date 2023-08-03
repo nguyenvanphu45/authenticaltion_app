@@ -1,0 +1,11 @@
+@use '../../scss/' as *;
+
+.wrapper {
+    display: flex;
+
+    .body {
+        width: 100%;
+        height: 100vh;
+        background-color: $bg-color-dark-2;
+    }
+}

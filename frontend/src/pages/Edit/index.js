@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { dispatchUpdateUser } from '../../redux/actions/authActions';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaChevronLeft } from 'react-icons/fa';
-import { createAxios } from '../../utils/createInstance';
+import { createAxios } from '../../utils/api';
+import Loading from '~/components/Loading';
 import validator from 'validator';
+import { getBase64 } from '../../utils/getBase64';
 
 const cx = classNames.bind(styles);
 const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
@@ -17,7 +19,9 @@ const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
 function EditPage() {
     const { user } = useSelector((state) => state.auth);
     const token = useSelector((state) => state.token);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [errorImg, setErrorImg] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     let axiosJWT = createAxios(user, token, dispatch, dispatchUpdateUser);
@@ -46,11 +50,18 @@ function EditPage() {
         return regex.test(password);
     };
 
-    const handleImage = (e) => {
-        const file = e.target.files[0];
-        file.preview = URL.createObjectURL(file);
+    const handleImage = async (e) => {
+        const data = e.target.files;
+        const file = data[0];
 
-        setUserUpdate({ ...userUpdate, image: file.preview });
+        if (file) {
+            let base64 = await getBase64(file);
+            if (base64 === null) {
+                setErrorImg(true);
+            } else {
+                setUserUpdate({ ...userUpdate, image: base64 });
+            }
+        }
     };
 
     const hanldeEdit = async (e) => {
@@ -59,31 +70,37 @@ function EditPage() {
         if (!email.length || !password.length || !name.length || !phone || !bio.length || !validatePassword(password)) {
             setError(true);
         } else {
-            try {
-                const res = await axiosJWT.put(
-                    `http://localhost:5000/users/edit/` + user._id,
-                    {
-                        email,
-                        password,
-                        name,
-                        phone,
-                        bio,
-                        image,
-                    },
-                    { headers: { token: `Bearer ${token}` } },
-                );
+            setLoading(true);
 
-                dispatch(dispatchUpdateUser({ ...res.data.user }));
-                navigate('/profile');
-            } catch (err) {
-                console.log(err);
-                // err.response.data.message && setUserUpdate({ ...user });
-            }
+            setTimeout(async () => {
+                try {
+                    const res = await axiosJWT.put(
+                        `http://10.10.23.32:5000/users/edit/` + user._id,
+                        {
+                            email,
+                            name,
+                            phone,
+                            bio,
+                            image,
+                        },
+                        { headers: { Authorization: `Bearer ${token}` } },
+                    );
+
+                    dispatch(dispatchUpdateUser({ ...res.data.user }));
+                    navigate('/profile');
+                } catch (err) {
+                    console.log(err);
+                    // err.response.data.message && setUserUpdate({ ...user });
+                }
+
+                setLoading(false);
+            }, 1500);
         }
     };
 
     return (
         <>
+            {loading && <Loading className={cx('loading-edit')} />}
             <div className={cx('back')}>
                 <FaChevronLeft />
                 <Link to="/profile">Back</Link>
@@ -94,7 +111,7 @@ function EditPage() {
                         <h3>Change Info</h3>
                         <p>Changes will be reflected to every services</p>
                     </div>
-                    <div className={cx('avatar')}>
+                    <div className={cx('avatar', errorImg && 'input-error')}>
                         <input type="file" hidden id="selectedFile" name="image" onChange={handleImage} />
                         <label htmlFor="selectedFile">
                             <img src={image ? image : noImage} alt="" />

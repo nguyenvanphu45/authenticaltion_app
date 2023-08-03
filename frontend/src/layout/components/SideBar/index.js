@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './SideBar.module.scss';
 import classNames from 'classnames/bind';
 import imageSvg from '~/assets/svg';
@@ -7,11 +7,11 @@ import { TbLogout } from 'react-icons/tb';
 import { FiChevronDown } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import Menu from '../../../components/Popper/Menu';
-import { createAxios } from '../../../utils/createInstance';
+import { createAxios } from '../../../utils/api';
 import { dispatchLogoutUser } from '../../../redux/actions/authActions';
 import Modal from 'react-modal';
 import FormModal from '../../../components/FormModal';
-import Search from '../Search';
+import GroupChannel from '../GroupChannel';
 import Channel from '../Channel';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -25,6 +25,7 @@ const customStyles = {
         bottom: 'auto',
         overflow: 'visible',
         transform: 'translate(-50%, -50%)',
+        background: 'transparent',
         padding: 0,
         border: 'none',
         borderRadius: '24px',
@@ -36,7 +37,8 @@ const customStyles = {
 
 function SideBar({ chat }) {
     const [openModal, setOpenModal] = useState(false);
-    const user = useSelector((state) => state.auth.user);
+    const auth = useSelector((state) => state.auth);
+    const { user, isLogged } = auth;
     const token = useSelector((state) => state.token);
     const navigate = useNavigate();
 
@@ -45,9 +47,11 @@ function SideBar({ chat }) {
 
     const logout = async () => {
         try {
-            await axiosJWT.post('http://localhost:5000/auth/logout', user._id, {
-                headers: { token: `Bearer ${token}` },
+            await axiosJWT.post('http://10.10.23.32:5000/auth/logout', user._id, {
+                headers: { Authorization: `Bearer ${token}` },
+                withCredentials: true,
             });
+            localStorage.clear();
             dispatch(dispatchLogoutUser());
         } catch (error) {
             console.log(error);
@@ -100,7 +104,7 @@ function SideBar({ chat }) {
                         </Modal>
                     </div>
                 )}
-                {chat ? <Channel chat={chat} /> : <Search />}
+                {chat ? <Channel chat={chat} /> : <GroupChannel />}
             </div>
             <div className={cx('footer')}>
                 <div className={cx('user')}>
@@ -108,7 +112,7 @@ function SideBar({ chat }) {
                     <h2>{user.name}</h2>
                 </div>
                 <Menu items={userMenu} sidebar>
-                    <div>
+                    <div className={cx('icon')}>
                         <FiChevronDown className={cx('icon-down')} />
                     </div>
                 </Menu>

@@ -1,11 +1,9 @@
 import axios from 'axios';
-import jwt_decode from 'jwt-decode';
 
 const refreshToken = async () => {
     try {
-        const res = await axios.post('http://localhost:5000/auth/refresh', {
+        const res = await axios.post('/auth/refresh', {
             withCredentials: true,
-            credentials: 'include',
         });
         return res.data;
     } catch (error) {
@@ -13,21 +11,28 @@ const refreshToken = async () => {
     }
 };
 
+const decodeToken = (token) => {
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    return JSON.parse(decodedPayload);
+};
+
 export const createAxios = (user, token, dispatch, state) => {
     const newInstance = axios.create();
     newInstance.interceptors.request.use(
         async (config) => {
             let date = new Date();
-            const decodedToken = jwt_decode(token);
+            const decodedToken = decodeToken(token);
             if (decodedToken.exp < date.getTime() / 1000) {
                 const data = await refreshToken();
+                console.log(data.accessToken)
                 const refreshUser = {
                     ...user,
                     // accessToken: data.accessToken,
                 };
                 dispatch(state(refreshUser));
                 dispatch({ type: 'GET_TOKEN', payload: data.accessToken });
-                config.headers['token'] = 'Bearer ' + data.accessToken;
+                config.headers['Authorization'] = 'Bearer ' + data.accessToken;
             }
             return config;
         },

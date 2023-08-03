@@ -32,7 +32,7 @@ function RegisterPage() {
         e.preventDefault();
         try {
             const res = await axios.post(
-                'http://localhost:5000/auth/register',
+                '/auth/register',
                 {
                     email,
                     password,
