@@ -16,18 +16,17 @@ const cx = classNames.bind(styles);
 
 function Header() {
     const auth = useSelector((state) => state.auth);
-    const token = useSelector((state) => state.token);
     const { user, isLogged } = auth;
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    let axiosJWT = createAxios(user, token, dispatch, dispatchLogoutUser);
+    let axiosJWT = createAxios(user, dispatch, dispatchLogoutUser);
 
     const logout = async () => {
         try {
-            await axiosJWT.post('http://10.10.23.32:5000/auth/logout', user._id, {
-                headers: { Authorization: `Bearer ${token}` },
+            await axiosJWT.post('/auth/logout', user._id, {
                 withCredentials: true,
             });
+            localStorage.removeItem('token');
             dispatch(dispatchLogoutUser());
         } catch (error) {
             console.log(error);

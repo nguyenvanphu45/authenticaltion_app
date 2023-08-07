@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { requestRefreshToken } = require('../controllers/auth.controller');
 
 const middlewareController = {
     verifyToken: (req, res, next) => {
@@ -24,3 +25,14 @@ const middlewareController = {
 };
 
 module.exports = middlewareController;
+
+
+// const decodedToken = jwt.decode(accessToken, process.env.JWT_ACCESS_KEY);
+// const expiresAt = decodedToken.expiresAt;
+
+// if (expiresAt < Date.now()) {
+//     return requestRefreshToken(req, res);
+// } else {
+//     req.user = decodedToken.user;
+//     next();
+// }

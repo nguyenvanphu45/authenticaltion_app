@@ -1,7 +1,6 @@
 const ACTIONS = {
     // auth
     LOGIN: 'LOGIN',
-    GET_TOKEN: 'GET_TOKEN',
     GET_USER: 'GET_USER',
     UPDATE_USER: 'UPDATE_USER',
     LOGOUT: 'LOGOUT',
@@ -9,8 +8,7 @@ const ACTIONS = {
     // group
     CREATE_GROUP: 'CREATE_GROUP',
     GET_GROUP: 'GET_GROUP',
-    SEARCH_GROUP: 'SEARCH_GROUP',
-    NOTIFICATION: 'NOTIFICATION'
+    SEARCH_GROUP: 'SEARCH_GROUP'
 };
 
 export default ACTIONS;

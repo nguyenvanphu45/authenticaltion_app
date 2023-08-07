@@ -2,38 +2,30 @@ import React, { useEffect, useState } from 'react';
 import styles from './Message.module.scss';
 import classNames from 'classnames/bind';
 import imageSvg from '../../assets/svg';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
 import Lottie from 'lottie-react';
 import animationData from '~/assets/animation/typing.json';
 import ScrollableMessage from '../ScrollableMessage';
-import { dispatchNotification } from '../../redux/actions/groupActions';
+import { createAxios } from '../../utils/api';
 
 const cx = classNames.bind(styles);
 
-const socket = io.connect('http://10.10.23.32:5000');
+const socket = io.connect('http://localhost:5000');
 let groupSelectedCompare;
 
 function Message({ groupSelected }) {
     const user = useSelector((state) => state.auth.user);
-    const token = useSelector((state) => state.token);
-    const notification = useSelector((state) => state.group.notification);
+    let axiosJWT = createAxios();
 
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [typing, setTyping] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
 
-    const dispatch = useDispatch();
-
-    const configHeader = {
-        headers: { Authorization: `Bearer ${token}` },
-    };
-
     const fetchMessages = async () => {
         try {
-            let { data } = await axios.get(`/chat/${groupSelected._id}`, configHeader);
+            let { data } = await axiosJWT.get(`/chat/${groupSelected._id}`);
 
             setMessages(data);
             socket.emit('join chat', groupSelected._id);
@@ -51,14 +43,10 @@ function Message({ groupSelected }) {
         if (e.key === 'Enter' && newMessage) {
             socket.emit('stop typing', groupSelected._id);
             try {
-                let { data } = await axios.post(
-                    '/chat',
-                    {
-                        content: newMessage,
-                        groupId: groupSelected._id,
-                    },
-                    configHeader,
-                );
+                let { data } = await axiosJWT.post('/chat', {
+                    content: newMessage,
+                    groupId: groupSelected._id,
+                });
 
                 socket.emit('new message', data);
                 setNewMessage('');
@@ -71,7 +59,6 @@ function Message({ groupSelected }) {
 
     useEffect(() => {
         socket.emit('setup', user);
-        socket.on('connection', () => console.log('Connection!!'));
         socket.on('typing', () => setIsTyping(true));
         socket.on('stop typing', () => setIsTyping(false));
     }, []);
@@ -79,13 +66,10 @@ function Message({ groupSelected }) {
     useEffect(() => {
         socket.on('message received', (newMessageReceived) => {
             if (!groupSelectedCompare || groupSelectedCompare._id !== newMessageReceived.group._id) {
-                // notification
-                if (!notification || !notification.includes(newMessageReceived)) {
-                    dispatch(dispatchNotification(newMessageReceived));
-                }
-            } else {
-                setMessages([...messages, newMessageReceived]);
+                return;
             }
+
+            setMessages([...messages, newMessageReceived]);
         });
     });
 

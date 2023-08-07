@@ -3,6 +3,39 @@
 .wrapper {
     display: flex;
 
+    .sidebar {
+
+        .title {
+            padding: 17px 21px 17px 33px;
+            color: $text-color-3;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        
+            h3 {
+                font-size: 18px;
+                font-weight: 700;
+            }
+        
+            svg {
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+            }
+
+            button {
+                background-color: transparent;
+
+                img {
+                    cursor: pointer;
+                    background-color: $bg-color-dark-2;
+                    border-radius: $radius-1;
+                }
+            }
+        }
+    }
+
     .body {
         width: 100%;
         background-color: $bg-color-dark-2;

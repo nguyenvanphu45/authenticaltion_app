@@ -4,9 +4,11 @@ import classNames from 'classnames/bind';
 import { useNavigate, useParams } from 'react-router-dom';
 import SideBar from '../../layout/components/SideBar';
 import { FiMenu } from 'react-icons/fi';
+import { FaChevronLeft } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import Message from '../../components/Message';
 import { useSelector } from 'react-redux';
+import Channel from '../../layout/components/Channel';
 
 const cx = classNames.bind(styles);
 
@@ -22,14 +24,24 @@ function ChatPage() {
         if (!groupSelected) {
             navigate('/chat');
         }
-    }, []);
+    });
+
+    const handleBack = () => {
+        navigate('/chat');
+    };
 
     return (
         <>
             {groupSelected && (
                 <div className={cx('wrapper')}>
                     <div className={cx('sidebar', isActive && 'active')}>
-                        <SideBar chat={groupSelected} />
+                        <SideBar>
+                            <div className={cx('title')}>
+                                <FaChevronLeft onClick={handleBack} />
+                                <h3>All Channel</h3>
+                            </div>
+                            <Channel chat={groupSelected} />
+                        </SideBar>
                     </div>
                     <div className={cx('body')}>
                         <div className={cx('header')}>

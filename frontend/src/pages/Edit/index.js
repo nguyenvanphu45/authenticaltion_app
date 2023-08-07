@@ -18,13 +18,12 @@ const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/;
 
 function EditPage() {
     const { user } = useSelector((state) => state.auth);
-    const token = useSelector((state) => state.token);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [errorImg, setErrorImg] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    let axiosJWT = createAxios(user, token, dispatch, dispatchUpdateUser);
+    let axiosJWT = createAxios(user, dispatch, dispatchUpdateUser);
 
     const initialState = {
         email: user.email,
@@ -74,17 +73,13 @@ function EditPage() {
 
             setTimeout(async () => {
                 try {
-                    const res = await axiosJWT.put(
-                        `http://10.10.23.32:5000/users/edit/` + user._id,
-                        {
-                            email,
-                            name,
-                            phone,
-                            bio,
-                            image,
-                        },
-                        { headers: { Authorization: `Bearer ${token}` } },
-                    );
+                    const res = await axiosJWT.put(`http://localhost:5000/users/edit/` + user._id, {
+                        email,
+                        name,
+                        phone,
+                        bio,
+                        image,
+                    });
 
                     dispatch(dispatchUpdateUser({ ...res.data.user }));
                     navigate('/profile');

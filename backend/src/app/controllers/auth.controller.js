@@ -84,7 +84,7 @@ const authController = {
                 id: user.id,
             },
             process.env.JWT_ACCESS_KEY,
-            { expiresIn: '60m' },
+            { expiresIn: '3d' },
         );
     },
 

@@ -9,8 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import imageSvg from '~/assets/svg';
 import useDebounce from '../../hooks/useDebounce';
 import axios from 'axios';
-import { dispatchCreateGroup } from '../../redux/actions/groupActions';
+import { dispatchCreateGroup, dispatchGetGroup } from '../../redux/actions/groupActions';
 import Loading from '../Loading';
+import { createAxios } from '../../utils/api';
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +22,7 @@ const initState = {
 };
 
 function FormModal({ onClose }) {
-    const token = useSelector((state) => state.token);
+    let axiosJWT = createAxios();
 
     const [inputValue, setInputValue] = useState(initState);
     const { name, description, search } = inputValue;
@@ -36,14 +37,10 @@ function FormModal({ onClose }) {
 
     const debounced = useDebounce(search, 500);
 
-    const configHeader = {
-        headers: { Authorization: `Bearer ${token}` },
-    };
-
     const fetchApi = async () => {
         try {
             setLoadingSearch(true);
-            const { data } = await axios.get(`/users?search=${debounced}`, configHeader);
+            const { data } = await axiosJWT.get(`/users?search=${debounced}`);
             setSearchResult(data.users);
             setLoadingSearch(false);
         } catch (error) {
@@ -100,23 +97,19 @@ function FormModal({ onClose }) {
             setLoading(true);
             setTimeout(async () => {
                 try {
-                    const res = await axios.post(
-                        '/group/create',
-                        {
-                            name: name,
-                            description: description,
-                            users: JSON.stringify(selectedUsers.map((user) => user._id)),
-                        },
-                        configHeader,
-                    );
-    
+                    const res = await axiosJWT.post('/group/create', {
+                        name: name,
+                        description: description,
+                        users: JSON.stringify(selectedUsers.map((user) => user._id)),
+                    });
+
                     dispatch(dispatchCreateGroup({ ...res.data }));
                     onClose();
                 } catch (error) {
                     console.log(error);
                 }
                 setLoading(false);
-            }, 1500)
+            }, 1500);
         }
     };
 

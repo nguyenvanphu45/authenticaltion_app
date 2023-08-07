@@ -5,37 +5,39 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { dispatchGetGroup, dispatchSearchGroups, fetchGroup } from '../../../redux/actions/groupActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { createAxios } from '../../../utils/api';
-import { dispatchGetUser, dispatchLogoutUser } from '../../../redux/actions/authActions';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { groupRemainingSelector } from '../../../redux/selectors/groupSelector';
-import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
 function GroupChannel() {
-    const token = useSelector((state) => state.token);
     const groups = useSelector(groupRemainingSelector);
+    const token = localStorage.getItem('token');
 
     const [search, setSearch] = useState('');
 
     const dispatch = useDispatch();
-    let axiosJWT = createAxios(groups, token, dispatch, dispatchGetGroup);
+    const navigate = useNavigate()
+    let axiosJWT = createAxios(groups, dispatch, dispatchGetGroup);
 
     useEffect(() => {
-        if (token) {
-            const getGroup = () => {
-                return fetchGroup(token, axios).then((res) => {
-                    dispatch(dispatchGetGroup([...res.data]));
-                });
-            };
-
-            getGroup();
+        if (!token) {
+            window.location.reload();
+            navigate('/login')
         }
-    }, [groups]);
+
+        const getGroup = () => {
+            return fetchGroup(axiosJWT).then((res) => {
+                dispatch(dispatchGetGroup([...res.data]));
+            });
+        };
+
+        getGroup();
+    }, [groups.length]);
 
     const handleChange = (e) => {
         setSearch(e.target.value);
-        dispatch(dispatchSearchGroups(e.target.value))
+        dispatch(dispatchSearchGroups(e.target.value));
     };
 
     return (

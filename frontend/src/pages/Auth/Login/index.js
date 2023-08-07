@@ -46,7 +46,7 @@ function LoginPage() {
             setUser({ ...user, error: '', success: res.data.message });
 
             dispatch(dispatchLogin({ ...res.data.user }));
-            dispatch({ type: 'GET_TOKEN', payload: res.data.user.accessToken });
+            localStorage.setItem('token', res.data.user.accessToken);
             navigate('/chat');
         } catch (err) {
             console.log(err);
