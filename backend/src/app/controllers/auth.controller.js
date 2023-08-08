@@ -37,7 +37,7 @@ const authController = {
                 let err = Object.values(error.errors)
                     .map((val) => val.message)
                     .join();
-                return res.status(500).json({ msg: err });
+                return res.status(500).json({ message: err });
             }
             return res.status(500).json({ msg: error.message });
         }
@@ -72,7 +72,7 @@ const authController = {
                 let err = Object.values(error.errors)
                     .map((val) => val.message)
                     .join();
-                return res.status(500).json({ msg: err });
+                return res.status(500).json({ message: err });
             }
             return res.status(500).json({ msg: error.message });
         }
